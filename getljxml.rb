@@ -6,7 +6,7 @@ lj_username = 'USERNAME' # replace USERNAME with your actual username
 lj_password = 'PASSWORD' # replace PASSWORD with your actual password
 firstyear = 2002 # Change this to the year your LJ starts
 
-# You shouldn't have to change these, but here they are just in case
+# You shouldn't have to change these, but here they are just in case!
 lj_login_url = 'https://www.livejournal.com/login.bml' # LJ Login url
 lj_archive_url = 'http://www.livejournal.com/export_do.bml' # XML download URL
 

@@ -2,9 +2,6 @@
 
 require "rexml/document"
 
-# It's very likely that we're going to be iterating over multiple files, so
-# let's try to handle that intelligently
-
 # IMPORTANT: Uncomment the next line and delete the 'NO' line
 # if you are using Day One 2
 # DAYONE2 = 'YES'
@@ -22,12 +19,14 @@ def create_dayone_entry(subject, date, text)
 	end
 # If there's no subject, don't try to use it
 	if subject.empty?
-		return %x(echo <<'EOF' #{text.dump} | dayone -j #{dayone_cmd_options} --date="#{date} EST" new )
+		return %x(echo <<'EOF' #{text.dump} | dayone #{dayone_cmd_options} --date="#{date} EST" new )
 	else
 		return %x(echo <<'EOF' #{subject.dump} #{text.dump} | #{dayone_cmd_options} dayone --date="#{date} EST" new )
 	end
 end
 
+# It's very likely that we're going to be iterating over multiple files, so
+# let's try to handle that intelligently!
 (0..ARGV.length - 1).each do |j|
 	ljdata = REXML::Document.new(File.new(ARGV[j]))
 
