@@ -5,17 +5,16 @@
 lj_username = 'USERNAME' # replace USERNAME with your actual username
 lj_password = 'PASSWORD' # replace PASSWORD with your actual password
 firstyear = 2002 # Change this to the year your LJ starts
-lj_login_url = 'https://www.livejournal.com/login.bml'
-lj_archive_url = 'http://www.livejournal.com/export_do.bml' # This is the URL that responds to the POST form we'll send
 
+# You shouldn't have to change these, but here they are just in case
+lj_login_url = 'https://www.livejournal.com/login.bml' # LJ Login url
+lj_archive_url = 'http://www.livejournal.com/export_do.bml' # XML download URL
 
 # Build login string, then log into LJ and save the cookie.
 
 loginstring = 'ret=1&user=' + lj_username + '&password=' + lj_password + '&action%3Alogin='
 
 puts %x(curl --cookie-jar cookies.txt --data #{loginstring.dump} #{lj_login_url.dump})
-
-# Set year
 
 # Iterate over years, starting with firstyear and running up to the current year
 (firstyear..Time.now.year).each do |current_year|
