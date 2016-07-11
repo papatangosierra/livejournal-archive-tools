@@ -40,13 +40,13 @@ Hell if I know.
 
 Put the `lj2dayone.rb` file in the same folder as all your LJ XML files. If you're using Day One Classic, you don't need to edit the script at all. You can skip to the terminal commands below. However, if you're running the beautiful new Day One 2 app, open `lj2dayone.rb` in a text editor. Find the lines that look like this:
 
-> `# DAYONE2 = 'YES'``
-> `DAYONE2 = 'NO'`
+	# DAYONE2 = 'YES'
+	DAYONE2 = 'NO'
 
 And change them to look like this:
 
-> `DAYONE2 = 'YES'`
-> `#DAYONE2 = 'NO'`
+	DAYONE2 = 'YES'
+	# DAYONE2 = 'NO'
 
 This makes sure the script adds your entries in the right place.
 
