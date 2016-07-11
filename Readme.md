@@ -12,6 +12,8 @@ First, download the file. Then put it in the directory where you want your LJ ar
 
 Then open up `getljxml.rb` in a text editor. DO NOT PANIC at this point. Replace USERNAME with your username, and PASSWORD with your password. (This script does not steal your password. It sends it to Livejournal the same way your browser does.) Also, change 2002 to the first year your own journal started.
 
+**NOTE:** Make sure that your username and password are surrounded with single straight quotes, like this one: '. If the text editor you're using smartens them, the script will not work. 
+
 You're almost done.
 
 Now, open up a Terminal window. Don't worry, you can do this. I believe in you.
