@@ -18,11 +18,14 @@ def create_dayone_entry(subject, date, text)
 		dayone_cmd_options = ''
 	end
 # If there's no subject, don't try to use it
-	if subject.empty?
-		return %x(echo <<'EOF' #{text.dump} | dayone #{dayone_cmd_options} --date="#{date} EST" new )
-	else
-		return %x(echo <<'EOF' #{subject.dump} #{text.dump} | #{dayone_cmd_options} dayone --date="#{date} EST" new )
-	end
+	#UGH Open scratch file
+	f = File.new("/tmp/" + `uuidgen`.strip + ".txt", "w+")
+	f.puts subject
+	f.puts text
+	f.close
+#	return `dayone #{dayone_cmd_options} --date="#{date} EST" new < #{fpath}`
+	return `cat #{f.path.strip} | dayone #{dayone_cmd_options} --date="#{date} EST" new `
+	rm(f)
 end
 
 # It's very likely that we're going to be iterating over multiple files, so
