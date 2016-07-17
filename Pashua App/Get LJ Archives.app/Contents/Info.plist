@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
+    <dict>
 	<key>BuildMachineOSBuild</key>
 	<string>14F1509</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>Get LJ Archives</string><!-- Must match your application's name  -->
+    <string>Get LJ Archives</string><!-- Must match your application's name  -->
+    <key>LSEnvironment</key>
+        <dict>
+            <key>LANG</key>
+            <string>en_US.UTF-8</string>
+        </dict>
 	<key>CFBundleIconFile</key>
 	<string>AppIcon</string>
 	<key>CFBundleIdentifier</key>
@@ -43,10 +48,10 @@
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
-	<string>NSApplication</string>
-	<key>StandardOutPath</key>
-  <string>/Users/pstarr/getljarchives.log</string>
-	<key>StandardErrorPath</key>
-  <string>/Users/pstarr/getljarchives_err.log</string>
+    <string>NSApplication</string>
+    <key>StandardOutPath</key>
+    <string>/dev/ttys000</string>
+    <key>StandardErrorPath</key>
+    <string>/dev/ttys000</string>
 </dict>
 </plist>
