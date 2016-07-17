@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-# Put your username and password here
+# Set up the Pashua binding and Syslog library
 $:.push(File.dirname($0))
 
 require 'syslog/logger'
@@ -9,8 +9,6 @@ include Pashua
 log = Syslog::Logger.new 'Get LJ Archives'
 
 # Set up the Pashua window
-
-
 config =<<EOS
 *.title = Download Livejoural Archives
 
@@ -64,11 +62,9 @@ cb.label = Cancel
 
 EOS
 
+# Run Pashua with the above configuration
 userinput = pashua_run(config)
-
 log.unknown("user input sent to Pashua")
-
-firstyear = userinput['startyear'].to_i # Change this to the year your LJ starts
 
 # You shouldn't have to change these, but here they are just in case!
 lj_login_url = 'https://www.livejournal.com/login.bml' # LJ Login url
@@ -78,27 +74,15 @@ lj_archive_url = 'http://www.livejournal.com/export_do.bml' # XML download URL
 
 loginstring = 'ret=1&user=' + userinput['username'] + '&password=' + userinput['ljpass'] + '&action%3Alogin='
 
-log.unknown("Loginstring: " + loginstring)
-
-log.unknown("Trying AGAIN: " + "/usr/bin/curl -s --cookie-jar #{userinput['usedir'].dump}/cookies.txt --data #{loginstring.dump} #{lj_login_url.dump}")
-
-log.unknown(`/usr/bin/curl -s --cookie-jar #{userinput['usedir'].dump}/cookies.txt --data #{loginstring.dump} #{lj_login_url.dump}`.to_s)
-
 loginresult = `/usr/bin/curl -s --cookie-jar #{userinput['usedir'].dump}/cookies.txt --data #{loginstring.dump} #{lj_login_url.dump}`
 
-puts loginresult
-
-log.unknown("Login result: " + loginresult)
-
-unless /error processing/.match(loginresult) == nil
+unless /error processing/.match(loginresult) == nil # Pop login failure notice if LJ says no
 	`/usr/bin/osascript -e 'tell app "System Events" to display dialog "Login failed. Your username or password is incorrect. Relaunch Get LJ Archives and try again." buttons {"OK"} with title "Livejournal Login Failed" with icon 2'`
 	Process.exit!(true)
 end
 
-log.unknown("Searched for error page")
-
 # Iterate over years, starting with firstyear and running up to the current year
-(firstyear..Time.now.year).each do |current_year|
+(userinput['startyear'].to_i..Time.now.year).each do |current_year|
 	# In each month of each year, send POST data that will fetch the LJ XML for that month.
 		(1..12).each do |current_month|
 			poststring = 'what=journal&year=' + current_year.to_s + '&month=' + current_month.to_s + '&format=xml&header=on&encid=2&field_eventtime=on&field_subject=on&field_event=on'
