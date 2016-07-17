@@ -4,16 +4,16 @@ require "rexml/document"
 
 # IMPORTANT: Uncomment the next line and delete the 'NO' line
 # if you are using Day One 2
-# DAYONE2 = 'YES'
-DAYONE2 = 'NO'
+DAYONE2 = 'YES'
+# DAYONE2 = 'NO'
 
-dayone_cmd_options = '-j "~/Library/Group Containers/5U8NS4GX82.dayoneapp2/Data/Auto Import/Default Journal.dayone" new'
+#dayone_cmd_options = '-j="~/Library/Group Containers/5U8NS4GX82.dayoneapp2/Data/Auto Import/Default Journal.dayone" new'
 
 # Function for creating a new Day One entry. Checks if the DAYONE2 constant
 # has been set; if so, writes to a different store.
 def create_dayone_entry(subject, date, text)
 	if DAYONE2 == 'YES'
-		dayone_cmd_options = '-j "~/Library/Group Containers/5U8NS4GX82.dayoneapp2/Data/Auto Import/Default Journal.dayone" new'
+		dayone_cmd_options = '-j="~/Library/Group Containers/5U8NS4GX82.dayoneapp2/Data/Auto Import/Default Journal.dayone"'
 	else
 		dayone_cmd_options = ''
 	end
@@ -24,7 +24,7 @@ def create_dayone_entry(subject, date, text)
 	f.puts text
 	f.close
 #	return `dayone #{dayone_cmd_options} --date="#{date} EST" new < #{fpath}`
-	return `cat #{f.path.strip} | dayone #{dayone_cmd_options} --date="#{date} EST" new `
+	return `cat #{f.path.strip} | dayone #{dayone_cmd_options} --date="#{date} EST" new`
 	rm(f)
 end
 
@@ -49,6 +49,12 @@ end
 		entrytexts[i].text.gsub!(/<lj-cut>/, "<hr />")
 		entrytexts[i].text.gsub!(/<\/lj-cut>/, "\n")
 
+		# Do some simple HTML-to-Markdown converseion
+		entrytexts[i].text.gsub!(/<\/?[pP].*>/, "\n")
+		entrytexts[i].text.gsub!(/<\/?(strong)*(STRONG)*(b)*(B)*>/, '**')
+		entrytexts[i].text.gsub!(/<\/?(em)*(EM)*(i)*(I)*>/, '**')
+		entrytexts[i].text.gsub!(/<[aA] .*"(?<url>.*)">(?<linktext>.*)<\/[aA]>/, '[\k<linktext>](\k<url>)')
+
 		# <lj-user> instances are converted to html links.
 		entrytexts[i].text.gsub!(/<lj user="(?<username>.*)">/, '<a href="http://\k<username>.livejournal.com/">\k<username></a>')
 
@@ -56,7 +62,7 @@ end
 				puts create_dayone_entry('', dates[i].text, entrytexts[i].text)
 			else
 				# When there's a subject, give it H1 tags before passing it to
-				puts create_dayone_entry('<h1>' + subjects[i].text + '</h1>', dates[i].text, entrytexts[i].text)
+				puts create_dayone_entry('**' + subjects[i].text + '**', dates[i].text, entrytexts[i].text)
 			end
 			puts "Entry from " + dates[i].text + " added."
 		end
