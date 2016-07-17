@@ -1,0 +1,118 @@
+#!/usr/bin/ruby
+# Put your username and password here
+$:.push(File.dirname($0))
+
+require 'syslog/logger'
+require 'Pashua'
+include Pashua
+
+log = Syslog::Logger.new 'Get LJ Archives'
+
+# Set up the Pashua window
+
+
+config =<<EOS
+*.title = Download Livejoural Archives
+
+instructions.type = text
+instructions.default = This simple tool will download XML files for each month of your Livejournal. It uses your username and password to log into Livejournal the same way your browser does. It does not remember them, nor does it remain logged into the service.
+
+usedir.type = openbrowser
+usedir.label = Choose a folder for your archives.
+usedir.mandatory = yes
+usedir.filetype = directory
+
+startyear.type = popup
+startyear.label = Choose your start year.
+startyear.option = 1999
+startyear.option = 2000
+startyear.option = 2001
+startyear.option = 2002
+startyear.option = 2003
+startyear.option = 2004
+startyear.option = 2005
+startyear.option = 2006
+startyear.option = 2007
+startyear.option = 2008
+startyear.option = 2009
+startyear.option = 2010
+startyear.option = 2011
+startyear.option = 2012
+startyear.option = 2013
+startyear.option = 2014
+startyear.option = 2015
+startyear.option = 2016
+
+username.type = textfield
+username.label = Username
+username.mandatory = yes
+username.tooltip = Type your Livejournal username here.
+
+ljpass.type = password
+ljpass.mandatory = yes
+ljpass.label = Password
+ljpass.tooltop = Type your Livejournal password here.
+
+caveat.type = text
+caveat.default = This window will close when you click "OK," but the script will continue to run in the background as it downloads your archive. You will receive notifications for each year's archive once it's successfully downloaded, and a system dialogue upon download completion.
+
+db.type = defaultbutton
+db.label = Download
+
+cb.type = cancelbutton
+cb.label = Cancel
+
+EOS
+
+userinput = pashua_run(config)
+
+log.unknown("user input sent to Pashua")
+
+firstyear = userinput['startyear'].to_i # Change this to the year your LJ starts
+
+# You shouldn't have to change these, but here they are just in case!
+lj_login_url = 'https://www.livejournal.com/login.bml' # LJ Login url
+lj_archive_url = 'http://www.livejournal.com/export_do.bml' # XML download URL
+
+# Build login string, then log into LJ and save the cookie.
+
+loginstring = 'ret=1&user=' + userinput['username'] + '&password=' + userinput['ljpass'] + '&action%3Alogin='
+
+log.unknown("Loginstring: " + loginstring)
+
+log.unknown("Trying AGAIN: " + "/usr/bin/curl -s --cookie-jar #{userinput['usedir'].dump}/cookies.txt --data #{loginstring.dump} #{lj_login_url.dump}")
+
+log.unknown(`/usr/bin/curl -s --cookie-jar #{userinput['usedir'].dump}/cookies.txt --data #{loginstring.dump} #{lj_login_url.dump}`.to_s)
+
+loginresult = `/usr/bin/curl -s --cookie-jar #{userinput['usedir'].dump}/cookies.txt --data #{loginstring.dump} #{lj_login_url.dump}`
+
+puts loginresult
+
+log.unknown("Login result: " + loginresult)
+
+unless /error processing/.match(loginresult) == nil
+	`/usr/bin/osascript -e 'tell app "System Events" to display dialog "Login failed. Your username or password is incorrect. Relaunch Get LJ Archives and try again." buttons {"OK"} with title "Livejournal Login Failed" with icon 2'`
+	Process.exit!(true)
+end
+
+log.unknown("Searched for error page")
+
+# Iterate over years, starting with firstyear and running up to the current year
+(firstyear..Time.now.year).each do |current_year|
+	# In each month of each year, send POST data that will fetch the LJ XML for that month.
+		(1..12).each do |current_month|
+			poststring = 'what=journal&year=' + current_year.to_s + '&month=' + current_month.to_s + '&format=xml&header=on&encid=2&field_eventtime=on&field_subject=on&field_event=on'
+			open(userinput['usedir'] + '/' + current_year.to_s + '-' + current_month.to_s + '.xml', 'w') do |f| # Open a file named e.g. "2006-4.xml"
+				f.puts %x(/usr/bin/curl --cookie #{userinput['usedir'].dump}/cookies.txt --data #{poststring.dump}  #{lj_archive_url.dump}).encode("UTF-8") # run CURL with the current month's POST info and dump the result into a file
+				end
+				puts "Waiting for 1 second so Livejournal doesn't have a fit..."
+				sleep(1)
+		end
+		`/usr/bin/osascript -e 'display notification "Livejournal archive for #{current_year.to_s} downloaded."'`
+end
+
+if File.exist?(userinput['usedir'] + '/' + userinput['startyear'] + '-1.xml')
+	`/usr/bin/osascript -e 'tell app "System Events" to display dialog "Your Livejoural archive has been downloaded." buttons {"OK"} with title "Get LJ Archives" with icon note'`
+else
+	`/usr/bin/osascript -e 'tell app "System Events" to display dialog "Your Livejoural archive was not downloaded." buttons {"OK"} with title "Get LJ Archives" with icon note'`
+end
