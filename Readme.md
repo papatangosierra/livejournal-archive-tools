@@ -36,7 +36,38 @@ If you're running Linux, I sincerely hope you know how to run a script at the sh
 
 ## How to use getljxml on a Windows machine
 
-Hell if I know.
+This takes a little work. You'll need to install a couple of things that don't come with Windows by default. 
+
+### Installing Ruby on Windows
+First, you'll need to install Ruby. 
+1. Go to https://rubyinstaller.org/downloads/
+2. Click on one of the Ruby installers to download and run. 
+	If you're not sure which one of the installers to choose, read the text on the right-hand side of the page under 'Which Versions to Download?'. This is a fairly simple script, and will probably run with any version of Ruby, so don't stress too much over what to pick. 
+3. Run the installer. 
+
+### Installing cURL on Windows
+Next you'll need to install cURL, which is basically a web browser that your script can use from the command line. Unfortunately, this can be a bit fiddly. The simplest set of instructions that I've found are available here: https://help.zendesk.com/hc/en-us/articles/229136847-Installing-and-using-cURL#install
+
+If you follow them step by step, you should get it working. 
+
+### Running the getljxml script
+Okay, now that you've done that, you're almost home free. 
+First, download the getljxml.rb file:
+1. From https://github.com/papatangosierra/livejournal-archive-tools, click the **Clone or download** button. 
+2. Click **Download ZIP**
+3. Extract the contents of the zip file and copy the getljxml.rb script to a folder where you want your files to be backed up. 
+
+Then, edit the getljxml.rb file with a text editor like Notepad. Replace USERNAME with your username, and PASSWORD with your password. (This script does not steal your password. It sends it to Livejournal the same way your browser does.) Also, change 2002 to the first year your own journal started. (If you don't know what year your journal started, go to your profile page and look for the date your account was created near the top.) 
+
+**NOTE:** Make sure that your username and password are surrounded with single straight quotes, like this one: '. If the text editor you're using smartens them, the script will not work. 
+
+Now you're ready to run the script. 
+1. Click **Start** and type `cmd` to open a command-line window. 
+2. Type `cd` followed by the path to the folder where the getljxml.rb script is located. 
+	To find the path, browse to the folder in Windows Explorer. Click in an empty part of the address bar of the window to show  and select the path. Press Ctrl+C to copy the path. Right-click in the command-line window and select paste to paste the path you have copied. 
+3. Type `ruby getljxml.rb` to run the script. 
+
+Now you should see a bunch of stuff happening. When stuff stops happening, look at your folder again. You should have a bunch of .xml files in there, each one corresponding to a month of entries from your Livejournal. Huzzah!
 
 ## How to use lj2dayone.rb
 
