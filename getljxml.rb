@@ -17,6 +17,11 @@ loginstring = 'ret=1&user=' + CGI.escape(lj_username) + '&password=' + CGI.escap
 
 puts %x(curl --cookie-jar cookies.txt --data #{loginstring.dump} #{lj_login_url.dump})
 
+# Make sure we actually logged in
+unless File.exists?('cookies.txt')
+	abort('Error: Could not log in to LiveJournal')
+end
+
 # Iterate over years, starting with firstyear and running up to the current year
 (firstyear..Time.now.year).each do |current_year|
 	# In each month of each year, send POST data that will fetch the LJ XML for that month.
