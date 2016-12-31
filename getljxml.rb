@@ -22,7 +22,7 @@ puts %x(curl --cookie-jar cookies.txt --data #{loginstring.dump} #{lj_login_url.
 		(1..12).each do |current_month|
 			poststring = 'what=journal&year=' + current_year.to_s + '&month=' + current_month.to_s + '&format=xml&header=on&encid=2&field_eventtime=on&field_subject=on&field_event=on'
 			open(current_year.to_s + '-' + current_month.to_s + '.xml', 'w') do |f| # Open a file named e.g. "2006-4.xml"
-				f.puts %x(curl --cookie cookies.txt --data #{poststring.dump}  #{lj_archive_url.dump}).encode("UTF-8") # run CURL with the current month's POST info and dump the result into a file
+				f.puts %x(curl -L --cookie cookies.txt --data #{poststring.dump}  #{lj_archive_url.dump}).encode("UTF-8") # run CURL with the current month's POST info and dump the result into a file
 				end
 				puts "Waiting for 1 second so Livejournal doesn't have a fit..."
 				sleep(1)
