@@ -40,6 +40,7 @@ This takes a little work. You'll need to install a couple of things that don't c
 
 ### Installing Ruby on Windows
 First, you'll need to install Ruby. 
+
 1. Go to https://rubyinstaller.org/downloads/
 2. Click on one of the Ruby installers to download and run. 
 	If you're not sure which one of the installers to choose, read the text on the right-hand side of the page under 'Which Versions to Download?'. This is a fairly simple script, and will probably run with any version of Ruby, so don't stress too much over what to pick. 
@@ -53,6 +54,7 @@ If you follow them step by step, you should get it working.
 ### Running the getljxml script
 Okay, now that you've done that, you're almost home free. 
 First, download the getljxml.rb file:
+
 1. From https://github.com/papatangosierra/livejournal-archive-tools, click the **Clone or download** button. 
 2. Click **Download ZIP**
 3. Extract the contents of the zip file and copy the getljxml.rb script to a folder where you want your files to be backed up. 
@@ -62,6 +64,7 @@ Then, edit the getljxml.rb file with a text editor like Notepad. Replace USERNAM
 **NOTE:** Make sure that your username and password are surrounded with single straight quotes, like this one: '. If the text editor you're using smartens them, the script will not work. 
 
 Now you're ready to run the script. 
+
 1. Click **Start** and type `cmd` to open a command-line window. 
 2. Type `cd` followed by the path to the folder where the getljxml.rb script is located. 
 	To find the path, browse to the folder in Windows Explorer. Click in an empty part of the address bar of the window to show  and select the path. Press Ctrl+C to copy the path. Right-click in the command-line window and select paste to paste the path you have copied. 
