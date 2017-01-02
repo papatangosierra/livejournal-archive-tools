@@ -1,4 +1,5 @@
 #!/usr/bin/ruby
+require 'cgi'
 
 # Put your username and password here
 
@@ -12,9 +13,14 @@ lj_archive_url = 'http://www.livejournal.com/export_do.bml' # XML download URL
 
 # Build login string, then log into LJ and save the cookie.
 
-loginstring = 'ret=1&user=' + lj_username + '&password=' + lj_password + '&action%3Alogin='
+loginstring = 'ret=1&user=' + CGI.escape(lj_username) + '&password=' + CGI.escape(lj_password) + '&action%3Alogin='
 
 puts %x(curl --cookie-jar cookies.txt --data #{loginstring.dump} #{lj_login_url.dump})
+
+# Make sure we actually logged in
+unless File.exists?('cookies.txt')
+	abort('Error: Could not log in to LiveJournal')
+end
 
 # Iterate over years, starting with firstyear and running up to the current year
 (firstyear..Time.now.year).each do |current_year|
