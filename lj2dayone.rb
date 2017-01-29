@@ -7,15 +7,20 @@ require "rexml/document"
 DAYONE2 = 'YES'
 # DAYONE2 = 'NO'
 
-#dayone_cmd_options = '-j="~/Library/Group Containers/5U8NS4GX82.dayoneapp2/Data/Auto Import/Default Journal.dayone" new'
 
 # Function for creating a new Day One entry. Checks if the DAYONE2 constant
-# has been set; if so, writes to a different store.
+# has been set; if so, writes to a different store. Uses /tmp/ and a scratch
+# file because echo can't be counted upon to deal with UTF-8 encoding.
 def create_dayone_entry(subject, date, text)
 	if DAYONE2 == 'YES'
-		dayone_cmd_options = '-j="~/Library/Group Containers/5U8NS4GX82.dayoneapp2/Data/Auto Import/Default Journal.dayone"'
+		dayone_cmd = 'dayone2'		
+		dayone_cmd_options = '-t LiveJournal'
+# Uncomment this next line if you've already created a separate Day One journal named
+# "Livejournal" and you want entries added to that one instead
+#		dayone_cmd_options = '-journal=LiveJournal -t LiveJournal'
 	else
-		dayone_cmd_options = ''
+		dayone_cmd = 'dayone'
+		dayone_cmd_options = '-j="~/Library/Group Containers/5U8NS4GX82.dayoneapp2/Data/Auto Import/Default Journal.dayone" new'
 	end
 # If there's no subject, don't try to use it
 	#UGH Open scratch file
@@ -23,8 +28,8 @@ def create_dayone_entry(subject, date, text)
 	f.puts subject
 	f.puts text
 	f.close
-#	return `dayone #{dayone_cmd_options} --date="#{date} EST" new < #{fpath}`
-	return `cat #{f.path.strip} | dayone #{dayone_cmd_options} --date="#{date} EST" new`
+#	cat the temp file and pipe it into the day one command line utility
+	return `cat #{f.path.strip} | #{dayone_cmd} #{dayone_cmd_options} --date="#{date} EST" new`
 	rm(f)
 end
 
@@ -38,7 +43,7 @@ end
 	dates = ljdata.elements.to_a('///eventtime')
 	entrytexts = ljdata.elements.to_a('///event')
 
-# Iterate over the array; subjects[] is used as the count array, but
+# Iterate over the array; subjects[] is used to derive the index number, but
 # that's an arbitrary choice; all three arrays should be the same length
 
 	(0..subjects.length - 1).each do |i|
@@ -48,9 +53,11 @@ end
 		entrytexts[i].text.gsub!(/<lj-cut[[:blank:]]text="(?<cuttext>.*)">/, '<p><strong>Under the Fold: \k<cuttext></strong></p>')
 		entrytexts[i].text.gsub!(/<lj-cut>/, "<hr />")
 		entrytexts[i].text.gsub!(/<\/lj-cut>/, "\n")
+		
 
-		# Do some simple HTML-to-Markdown converseion
-		entrytexts[i].text.gsub!(/<\/?[pP].*>/, "\n")
+		# Do some naive HTML-to-Markdown conversion
+		entrytexts[i].text.gsub!(/<\/?[pP]>/, "\n")
+		entrytexts[i].text.gsub!(/<\/[pP]>/, "")
 		entrytexts[i].text.gsub!(/<\/?(strong)*(STRONG)*(b)*(B)*>/, '**')
 		entrytexts[i].text.gsub!(/<\/?(em)*(EM)*(i)*(I)*>/, '**')
 		entrytexts[i].text.gsub!(/<[aA] .*"(?<url>.*)">(?<linktext>.*)<\/[aA]>/, '[\k<linktext>](\k<url>)')
@@ -61,8 +68,8 @@ end
 		if subjects[i].text.to_s.empty?
 				puts create_dayone_entry('', dates[i].text, entrytexts[i].text)
 			else
-				# When there's a subject, give it H1 tags before passing it to
-				puts create_dayone_entry('**' + subjects[i].text + '**', dates[i].text, entrytexts[i].text)
+				# When there's a subject, give it a top-level markdown header tag before passing it to Day One
+				puts create_dayone_entry('# ' + subjects[i].text, dates[i].text, entrytexts[i].text)
 			end
 			puts "Entry from " + dates[i].text + " added."
 		end
