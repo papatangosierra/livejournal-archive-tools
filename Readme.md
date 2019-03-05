@@ -32,7 +32,7 @@ Now you should see a bunch of stuff happening. When stuff stops happening, look 
 
 ## How to use getljxml on a Linux machine
 
-If you're running Linux, I sincerely hope you know how to run a script at the shell. If you can't, you're beyond my help.
+It's the same as doing it on a Mac! 
 
 ## How to use getljxml on a Windows machine
 
