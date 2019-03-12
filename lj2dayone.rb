@@ -2,8 +2,7 @@
 
 require "rexml/document"
 
-# IMPORTANT: Uncomment the next line and delete the 'NO' line
-# if you are using Day One 2
+# IMPORTANT: If you're using Day One Classic, comment out or delete the "YES" line, and uncomment the "NO" line. 
 DAYONE2 = 'YES'
 # DAYONE2 = 'NO'
 
@@ -20,7 +19,7 @@ def create_dayone_entry(subject, date, text)
 #		dayone_cmd_options = '-journal=LiveJournal -t LiveJournal'
 	else
 		dayone_cmd = 'dayone'
-		dayone_cmd_options = '-j="~/Library/Group Containers/5U8NS4GX82.dayoneapp2/Data/Auto Import/Default Journal.dayone" new'
+		dayone_cmd_options = '-j="~/Library/Group Containers/5U8NS4GX82.dayoneapp/Data/Auto Import/Default Journal.dayone" new'
 	end
 # If there's no subject, don't try to use it
 	#UGH Open scratch file
