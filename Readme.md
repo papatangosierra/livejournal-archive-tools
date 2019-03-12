@@ -4,7 +4,7 @@ If you're still using [Livejournal][lj], odds are you've got a _lot_ of stuff th
 
 My personal archives on LJ go back to 2002, and the idea of individually downloading well in excess of a hundred files by hand seems absurd. So here's a way to get your whole LJ archive without doing that.
 
-First of all, you need to be able to run ruby scripts. If you're on a Mac or Linux machine, you already can. If you're running Windows, I assume there's some way to do this, but hell if I know what it is.
+First of all, you need to be able to run ruby scripts. If you're on a Mac or Linux machine, you already can. If you're running Windows, it takes a little bit of doing, but you can still do it!
 
 ## How to use getljxml.rb on a Mac
 
