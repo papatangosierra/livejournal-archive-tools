@@ -8,14 +8,22 @@ lj_password = 'PASSWORD' # replace PASSWORD with your actual password
 firstyear = 2013 # Change this to the year your LJ starts
 
 # You shouldn't have to change these, but here they are just in case!
-lj_login_url = 'https://www.livejournal.com/login.bml' # LJ Login url
+lj_login_url = 'http://www.livejournal.com/interface/flat' # LJ API url
 lj_archive_url = 'http://www.livejournal.com/export_do.bml' # XML download URL
 
 # Build login string, then log into LJ and save the cookie.
 
-loginstring = 'ret=1&user=' + CGI.escape(lj_username) + '&password=' + CGI.escape(lj_password) + '&action%3Alogin='
+loginstring = 'mode=sessiongenerate&user=' + CGI.escape(lj_username) + '&password=' + CGI.escape(lj_password)
 
-puts %x(curl --cookie-jar cookies.txt --data #{loginstring.dump} #{lj_login_url.dump})
+lj_session_cookie = %x(curl --data #{loginstring.dump} #{lj_login_url.dump}).lines
+
+if lj_session_cookie[0] =~ /ljsession/ # if we logged in successfully, write out the cookie (We can detect a successful login if the first line of the response to our query includes the "ljsession" string
+	open('cookies.txt', 'w') do |f|
+		f.puts("#HttpOnly_.livejournal.com\tTRUE\t/\tFALSE\t0\tljsession\t" + lj_session_cookie[1])
+	end
+else
+	abort('ERROR: Could not log in to LiveJournal.')
+end
 
 # Make sure we actually logged in
 unless File.exists?('cookies.txt')
