@@ -38,9 +38,9 @@ end
 	ljdata = REXML::Document.new(File.new(ARGV[j]))
 
 # Extract the relevant data from the ljdata xml object
-	subjects = ljdata.elements.to_a('///subject')
-	dates = ljdata.elements.to_a('///eventtime')
-	entrytexts = ljdata.elements.to_a('///event')
+	subjects = ljdata.elements.to_a('//subject')
+	dates = ljdata.elements.to_a('//eventtime')
+	entrytexts = ljdata.elements.to_a('//event')
 
 # Iterate over the array; subjects[] is used to derive the index number, but
 # that's an arbitrary choice; all three arrays should be the same length
