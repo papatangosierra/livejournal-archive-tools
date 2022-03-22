@@ -8,7 +8,7 @@ First of all, you need to be able to run ruby scripts. If you're on a Mac or Lin
 
 ## How to use getljxml.rb on a Mac
 
-First, download the file. Then put it in the directory where you want your LJ archives to be downloaded.
+First, download and unzip the files. ([Here's a link for doing that](https://github.com/papatangosierra/livejournal-archive-tools/archive/refs/heads/master.zipi)). Then put it in the directory where you want your LJ archives to be downloaded.
 
 Then open up `getljxml.rb` in a text editor. DO NOT PANIC at this point. Replace USERNAME with your username, and PASSWORD with your password. (This script does not steal your password. It sends it to Livejournal the same way your browser does.) Also, change 2002 to the first year your own journal started.
 
