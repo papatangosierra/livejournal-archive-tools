@@ -10,12 +10,6 @@ First of all, you need to be able to run ruby scripts. If you're on a Mac or Lin
 
 First, download and unzip the files. ([Here's a link for doing that](https://github.com/papatangosierra/livejournal-archive-tools/archive/refs/heads/master.zip)). Then move the file `getljxml.rb` to the directory where you want your LJ archives to be downloaded.
 
-Then open up `getljxml.rb` in a text editor. DO NOT PANIC at this point. Replace USERNAME with your username, and PASSWORD with your password. (This script does not steal your password. It sends it to Livejournal the same way your browser does.) Also, change 2002 to the first year your own journal started.
-
-**NOTE:** Make sure that your username and password are surrounded with single straight quotes, like this one: '. If the text editor you're using smartens them, the script will not work. 
-
-You're almost done.
-
 Now, open up a Terminal window. Don't worry, you can do this. I believe in you.
 
 If you're on a Mac, type `cd `, put a space after it, and then drag the folder containing `getljxml.rb` into the terminal window. Then hit `return`.
@@ -28,7 +22,9 @@ Now, type two things.
 
 > `./getljxml.rb` (Hit return again!)
 
-Now you should see a bunch of stuff happening. When stuff stops happening, look at your folder again. You should have a bunch of .xml files in there, each one corresponding to a month of entries from your Livejournal. Huzzah!
+When it prompts you, enter you LiveJournal username and password.  Nothing will appear on the screen as you type your password, so anyone looking over your shoulder will not see it.
+
+Now you should see each month's posts retrieved one at a time.  When the retrievals stop (at the end of the current year), look at your folder again.  You should have a bunch of .xml files in there, each one corresponding to a month of entries from your Livejournal.  Huzzah!
 
 ## How to use getljxml on a Linux machine
 
